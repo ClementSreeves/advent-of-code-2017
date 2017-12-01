@@ -1,2 +1,4 @@
 # advent-of-code-2017
-Solutions for the Advent of Code 2017 challenges
+Python solutions for the Advent of Code 2017 challenges
+
+See https://adventofcode.com/
