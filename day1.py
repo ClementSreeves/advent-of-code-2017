@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import utils
 
 def solve_captcha(s, shift=1):
