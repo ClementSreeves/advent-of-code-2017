@@ -1,3 +1,6 @@
-def import_file(filename):
+def import_file(filename, split=False):
     with open(filename, 'r') as f:
-        return f.read().strip()
+        if split:
+            return [line.strip() for line in f.readlines()]
+        else:
+            return f.read().strip()
