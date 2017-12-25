@@ -1,5 +1,5 @@
 import base64
-from itertools import combinations_with_replacement as combos
+import itertools
 
 def rotate2(array, amount):
     for _ in range(abs(amount)):
@@ -57,25 +57,36 @@ def used_squares(key, grid_size=128):
         used += sum([bitcount(b) for b in hash_output])
     return used
     
-def grid(key, grid_size=128):
+def make_grid(key, grid_size=128):
     grid = []
     for i in range(grid_size):
         hash_output = knot_hash(bytes(key + '-' + str(i), encoding='utf8'))
-        bits = ''.join([format(b, 'b') for b in hash_output])
+        bits = ''.join([format(b, '08b') for b in hash_output])
         grid.append([bit == '1' for bit in bits])
     return grid
+
+def expand(point, grid, examined):
+    if max(point) >= len(grid) or min(point) < 0:
+        return 0
+    if grid[point[0]][point[1]] and point not in examined:
+        examined.add(point)
+        directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+        neighbours = [(point[0] + d[0], point[1] + d[1]) for d in directions]
+        for neighbour in neighbours:
+            expand(neighbour, grid, examined)
+        return 1
+    else:
+        return 0
 
 def regions(grid):
     grid_size = len(grid)
     examined = set([])
-    regions = 0
-    for i, j in combos(2, range(grid_size))
-        if grid[i][j] and (i, j) not in examined:
-            regions += 1
-            d, r = grid
-        
+    num_regions = 0
+    for i, j in itertools.product(range(grid_size), repeat=2):
+        num_regions += expand((i,j), grid, examined)
+    return num_regions    
        
-#print([bitcount(i) for i in range(16)])
 
-#print(used_squares('flqrgnkx'))
-print(regions('uugsqrei'))
+test_grid = [[1,1,0,2,0,3,0,0],[0,1,0,2,0,3,0,4]]
+grid = make_grid('uugsqrei')
+print(regions(grid))
